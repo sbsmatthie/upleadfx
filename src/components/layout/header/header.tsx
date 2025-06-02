@@ -209,8 +209,8 @@ const AppHeader = observer(() => {
                                         fill='white'
                                     />
                                     <span className='logo-text'>
-                                        <span className='logo-d'>uplead</span>
-                                        <span className='logo-markets'>fx</span>
+                                        <span className='logo-d'>upleadfx</span>
+                                        <span className='logo-markets'>Academy</span>
                                     </span>
                                 </div>
 
@@ -338,8 +338,8 @@ const AppHeader = observer(() => {
                                         fill='white'
                                     />
                                     <span className='logo-text'>
-                                        <span className='logo-d'>uplead</span>
-                                        <span className='logo-markets'>fx</span>
+                                        <span className='logo-d'>upleadfx</span>
+                                        <span className='logo-markets'>Academy</span>
                                     </span>
                                 </div>
 

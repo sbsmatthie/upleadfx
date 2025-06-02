@@ -180,10 +180,11 @@ const AppHeader = observer(() => {
                                 marginRight: '24px',
                             }}
                         >
-                            <span className='logo-text'>
-                                <span className='logo-d'>uplead</span>
-                                <span className='logo-markets'>fx</span>
-                            </span>
+                            <Wrapper variant='left'>
+                                <div className='custom-logo-wrapper' style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                    <img src='/assets/logo/logo.jpeg' alt='dtradersite' style={{ height: '35px' }} />
+                                </div>
+                            </Wrapper>
                         </div>
                     ) : (
                         <>
@@ -193,6 +194,12 @@ const AppHeader = observer(() => {
                             >
                                 {isDrawerOpen ? <X size={24} /> : <Menu size={24} />}
                             </button>
+
+                            <Wrapper variant='left'>
+                                <div className='custom-logo-wrapper' style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                    <img src='/assets/logo/logo.jpeg' alt='dtradersite' style={{ height: '35px' }} />
+                                </div>
+                            </Wrapper>
 
                             <div className={`mobile-menu ${isDrawerOpen ? 'open' : ''}`}>
                                 <div

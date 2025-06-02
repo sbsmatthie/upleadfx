@@ -6,8 +6,8 @@ import { LabelPairedMoonCaptionRegularIcon } from '@deriv/quill-icons/LabelPaire
 import { LabelPairedExclamationCaptionRegularIcon } from '@deriv/quill-icons/LabelPaired';
 import { Localize } from '@deriv-com/translations';
 // Import the XML files directly
-import x1 from './bot-files/Accumulators Robot $$.xml'; // Correct the import statement
-import x2 from './bot-files/Augmentation Bot $$$(2025).xml';
+import x1 from './bot-files/BLACK PANTHER BOT 2.0.xml'; // Correct the import statement
+import x2 from './bot-files/LOOK KILLA version 1.xml';
 import x3 from './bot-files/MasterSpeedBot$$$ V2(Over_Under Only).xml';
 import x4 from './bot-files/MDT SPEEDBOT $$ V2.xml'; // Correct the import statement
 import x5 from './bot-files/Q3 POWERAUTO(Rise_Fall & Even_Odd).xml';
@@ -23,8 +23,8 @@ const FreeBots = observer(() => {
 
     // Map filenames to their XML content
     const botXmlMap: Record<string, string> = {
-        'Accumulators Robot $$.xml': x1,
-        'Augmentation Bot $$$(2025).xml': x2,
+        'BLACK PANTHER BOT 2.0.xml': x1,
+        'LOOK KILLA version 1.xml': x2,
         'MasterSpeedBot$$$ V2(Over_Under Only).xml': x3,
         'MDT SPEEDBOT $$ V2.xml': x4,
         'Q3 POWERAUTO(Rise_Fall & Even_Odd).xml': x5,
@@ -34,15 +34,15 @@ const FreeBots = observer(() => {
 
     const bots = [
         {
-            name: 'Accumulators Robot $$',
-            description: 'Accumulators Robot $$',
-            file: 'Accumulators Robot $$.xml',
+            name: 'BLACK PANTHER BOT 2.0',
+            description: 'BLACK PANTHER BOT 2.0',
+            file: 'BLACK PANTHER BOT 2.0.xml',
             icon: '🤖',
         },
         {
-            name: 'Augmentation Bot $$$(2025)',
-            description: 'Augmentation Bot $$$(2025)',
-            file: 'Augmentation Bot $$$(2025).xml',
+            name: 'LOOK KILLA version 1',
+            description: 'LOOK KILLA version 1',
+            file: 'LOOK KILLA version 1.xml',
             icon: '🤖',
         },
         {

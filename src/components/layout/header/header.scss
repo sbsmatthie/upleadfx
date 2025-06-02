@@ -379,25 +379,6 @@
     }
 }
 
-
-
-
-@media (min-width: 769px) {
-    .mobile-menu {
-        display: flex !important;
-        position: static;
-        flex-direction: row;
-        background: none;
-        box-shadow: none;
-        padding: 0;
-        gap: 1rem;
-    }
-
-    .mobile-menu-icon {
-        display: none;
-    }
-}
-
 /* --------------------------- LOGO TEXT --------------------------- */
 
 @keyframes glow {

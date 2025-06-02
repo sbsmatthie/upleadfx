@@ -180,11 +180,132 @@ const AppHeader = observer(() => {
                                 marginRight: '24px',
                             }}
                         >
+                            <button
+                                className='menu-button'
+                                onClick={() => setIsDrawerOpen(prev => !prev)}
+                            >
+                                {isDrawerOpen ? <X size={24} /> : <Menu size={24} />}
+                            </button>
+
                             <Wrapper variant='left'>
                                 <div className='custom-logo-wrapper' style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                     <img src='/assets/logo/logo.jpeg' alt='dtradersite' style={{ height: '35px' }} />
                                 </div>
                             </Wrapper>
+
+                            <div className={`mobile-menu ${isDrawerOpen ? 'open' : ''}`}>
+                                <div
+                                    className='custom-logo-wrapper'
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '10px',
+                                        marginRight: '24px',
+                                    }}
+                                >
+                                    <LegacyCloseCircle2pxBlackIcon onClick={() => setIsDrawerOpen(prev => !prev)}
+                                        height='30px'
+                                        width='30px'
+                                        fill='white'
+                                    />
+                                    <span className='logo-text'>
+                                        <span className='logo-d'>uplead</span>
+                                        <span className='logo-markets'>fx</span>
+                                    </span>
+                                </div>
+
+                                <a
+                                  href="https://app.deriv.com/reports/positions"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="menu-link-button"
+                                >
+                                  <LabelPairedFileInvoiceDollarLgRegularIcon
+                                    height="30px"
+                                    width="30px"
+                                    fill="white"
+                                  />
+                                  <span>Reports</span>
+                                </a>
+                                <a
+                                  href="https://app.deriv.com/settings"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="menu-link-button"
+                                >
+                                  <LegacySettings1pxIcon
+                                    height="30px"
+                                    width="30px"
+                                    fill="white"
+                                  />
+                                  <span>Settings</span>
+                                </a>
+                                <a
+                                  href="#"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="menu-link-button"
+                                >
+                                  <LabelPairedWalletCirclePlusCaptionRegularIcon
+                                    height="30px"
+                                    width="30px"
+                                    fill="white"
+                                  />
+                                  <span>Deposit</span>
+                                </a>
+                                <a
+                                  href="#"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="menu-link-button"
+                                >
+                                  <LabelPairedWalletCircleMinusLgRegularIcon
+                                    height="30px"
+                                    width="30px"
+                                    fill="white"
+                                  />
+                                  <span>Withdraw</span>
+                                </a>
+                                <a
+                                  href="https://t.me/zim_top_trader"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="menu-link-button"
+                                >
+                                  <LabelPairedTelegramCaptionIcon
+                                    height="30px"
+                                    width="30px"
+                                    fill="white"
+                                  />
+                                  <span>Telegram</span>
+                                </a>
+                                <a
+                                  href="https://chat.whatsapp.com/ENa533fQ7P4ET9b9jokdOB"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="menu-link-button"
+                                >
+                                  <LabelPairedWhatsappCaptionIcon
+                                    height="30px"
+                                    width="30px"
+                                    fill="white"
+                                  />
+                                  <span>WhatsAPP</span>
+                                </a>
+                                <a
+                                  href="http://www.tiktok.com/@upleadforexacademy"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="menu-link-button"
+                                >
+                                  <LabelPairedTiktokCaptionIcon
+                                    height="30px"
+                                    width="30px"
+                                    fill="white"
+                                  />
+                                  <span>TikTok</span>
+                                </a>
+                            </div>
                         </div>
                     ) : (
                         <>

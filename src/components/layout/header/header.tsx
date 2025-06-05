@@ -42,10 +42,11 @@ const AppHeader = observer(() => {
     const [isMenuOpen, setIsMenuOpen] = useState(false); // Track menu state
 
     const renderAccountSection = () => {
-        console.log('aaaaaaaaaaaaaaaaaaaaaaa', client, currency);
         if (isAuthorizing) {
+            console.log('1111111111111111111111111111111');
             return <AccountsInfoLoader isLoggedIn isMobile={!isDesktop} speed={3} />;
         } else if (activeLoginid) {
+            console.log('222222222222222222222222222222222222');
             return (
                 <>
                     {/* <CustomNotifications /> */}
@@ -55,7 +56,7 @@ const AppHeader = observer(() => {
                             const urlParams = new URLSearchParams(window.location.search);
                             const account_param = urlParams.get('account');
                             const is_virtual = client?.is_virtual || account_param === 'demo';
-console.log('aaaaaaaaaaaaaaaaaaaaaaa', is_virtual, currency);
+console.log('222222222222222222222222222222222', is_virtual, currency);
                             if (is_virtual) {
                                 redirect_url.searchParams.set('account', 'demo');
                             } else if (currency) {
@@ -112,6 +113,7 @@ console.log('aaaaaaaaaaaaaaaaaaaaaaa', is_virtual, currency);
                 </>
             );
         } else {
+            console.log('444444444444444444444444444444444444');
             return (
                 <div className='auth-actions'>
                     <Button

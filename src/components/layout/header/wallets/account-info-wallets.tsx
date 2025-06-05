@@ -123,25 +123,9 @@ const AccountInfoWallets = observer(({ is_dialog_on, toggleDialog }: TAccountInf
     const active_account = accounts?.[loginid ?? ''];
     const linked_dtrade_trading_account_loginid = loginid;
 
-    let linked_wallet = wallet_list?.find(wallet => wallet.dtrade_loginid === linked_dtrade_trading_account_loginid);
-
-    // Check if this is the special demo account that should appear as real
-    const force_real_icon_loginids = ['CR1234567']; // <-- Add any special loginids here
-
-    //if (linked_wallet && force_real_icon_loginids.includes(linked_dtrade_trading_account_loginid)) {
-        linked_wallet = {
-            ...linked_wallet,
-            is_virtual: false, // ensures the "Demo" badge won't show
-            icons: {
-                dark: 'ic-usd',  // replace with the actual icon for real USD
-                light: 'ic-usd',
-            },
-            icon_type: 'real', // or whatever type triggers the real wallet icon style
-            landing_company_name: 'USD', // optional: updates label if used elsewhere
-        };
-    //}
-
+    const linked_wallet = wallet_list?.find(wallet => wallet.dtrade_loginid === linked_dtrade_trading_account_loginid);
     const show_badge = linked_wallet?.is_virtual;
+    console.log('linked_wallet', linked_wallet)
 
     return (
         <div className='acc-info__wrapper'>

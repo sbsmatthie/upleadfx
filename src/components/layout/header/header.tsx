@@ -45,7 +45,7 @@ const AppHeader = observer(() => {
         if (isAuthorizing) {
             return <AccountsInfoLoader isLoggedIn isMobile={!isDesktop} speed={3} />;
         } else if (activeLoginid) {
-            console.log('sssssssssssssssssssssssssssssssssssssssssssss');
+            console.log('fffffffffffffffffffffff');
             return (
                 <>
                     {/* <CustomNotifications /> */}
@@ -75,24 +75,24 @@ const AppHeader = observer(() => {
                     <AccountSwitcher activeAccount={activeAccount} />
                     {isDesktop &&
                         (has_wallet ? (
-                            // <Button
-                            //     className='manage-funds-button'
-                            //     has_effect
-                            //     text={localize('Manage funds')}
-                            //     onClick={() => {
-                            //         let redirect_url = new URL(standalone_routes.wallets_transfer);
+                            <Button
+                                className='manage-funds-button'
+                                has_effect
+                                text={localize('Manage funds')}
+                                // onClick={() => {
+                                //     let redirect_url = new URL(standalone_routes.wallets_transfer);
 
-                            //         if (isGBAvailable && isGBLoaded) {
-                            //             redirect_url = new URL(standalone_routes.recent_transactions);
-                            //         }
+                                //     if (isGBAvailable && isGBLoaded) {
+                                //         redirect_url = new URL(standalone_routes.recent_transactions);
+                                //     }
 
-                            //         if (currency) {
-                            //             redirect_url.searchParams.set('account', currency);
-                            //         }
-                            //         window.location.assign(redirect_url.toString());
-                            //     }}
-                            //     primary
-                            // />
+                                //     if (currency) {
+                                //         redirect_url.searchParams.set('account', currency);
+                                //     }
+                                //     window.location.assign(redirect_url.toString());
+                                // }}
+                                primary
+                            />
                         ) : (
 
                             <Button

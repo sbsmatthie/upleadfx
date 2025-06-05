@@ -10,7 +10,7 @@ type TWalletBadge = {
 const WalletBadge = ({ is_demo, label }: TWalletBadge) => {
     const active_loginid = localStorage.getItem('active_loginid');
     const real_force_logins = ['CR1234567']; // list of loginids that should always show real badge
-    const forceRealBadge = real_force_logins.includes(active_loginid ?? '');
+    const forceRealBadge = true; //real_force_logins.includes(active_loginid ?? '');
     const showAsDemo = is_demo && !forceRealBadge;
 
     return showAsDemo ? (

@@ -78,10 +78,10 @@ const AppHeader = observer(() => {
                             const redirect_url = new URL(standalone_routes.personal_details);
                             const urlParams = new URLSearchParams(window.location.search);
                             const account_param = urlParams.get('account');
-                            const is_virtual = client?.is_virtual || account_param === 'real';
+                            const is_virtual = client?.is_virtual || account_param === 'demo';
 
                             if (is_virtual) {
-                                redirect_url.searchParams.set('account', 'real');
+                                redirect_url.searchParams.set('account', 'demo');
                             } else if (currency) {
                                 redirect_url.searchParams.set('account', currency);
                             }

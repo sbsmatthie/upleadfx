@@ -163,10 +163,11 @@ const AccountInfoWallets = observer(({ is_dialog_on, toggleDialog }: TAccountInf
                     />
                     {show_badge && (
                         <WalletBadge
-                            
+                            is_demo={Boolean(linked_wallet?.is_virtual)}
+                            label={linked_wallet?.landing_company_name}
                         />
                     )}
-                    <DropdownArrow is_disabled={Boolean(active_account?.is_disabled)} />
+                    <DropdownArrow is_disabled=false} />
                 </div>
             </AccountInfoWrapper>
             {isDesktop ? (

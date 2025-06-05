@@ -180,7 +180,7 @@ const AccountSwitcher = observer(({ activeAccount }: TAccountSwitcher) => {
                             switchAccount={switchAccount}
                             activeLoginId={activeAccount?.loginid}
                             client={client}
-                        />
+                        /> 
                     </UIAccountSwitcher.Tab>
                     <UIAccountSwitcher.Tab title={tabs_labels.demo}>
                         <RenderAccountItems

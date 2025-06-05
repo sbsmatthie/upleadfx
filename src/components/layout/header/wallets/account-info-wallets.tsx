@@ -125,6 +125,7 @@ const AccountInfoWallets = observer(({ is_dialog_on, toggleDialog }: TAccountInf
 
     const linked_wallet = wallet_list?.find(wallet => wallet.dtrade_loginid === linked_dtrade_trading_account_loginid);
     const show_badge = linked_wallet?.is_virtual;
+    console.log('testing log', balance, show_badge)
 
     return (
         <div className='acc-info__wrapper'>
@@ -167,7 +168,7 @@ const AccountInfoWallets = observer(({ is_dialog_on, toggleDialog }: TAccountInf
                             label={linked_wallet?.landing_company_name}
                         />
                     )}
-                    <DropdownArrow is_disabled=false} />
+                    <DropdownArrow is_disabled={Boolean(active_account?.is_disabled)} />
                 </div>
             </AccountInfoWrapper>
             {isDesktop ? (

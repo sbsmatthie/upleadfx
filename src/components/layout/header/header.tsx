@@ -96,7 +96,6 @@ const AccountSwitcher = observer(({ activeAccount }: TAccountSwitcher) => {
         return accountList?.map(account => {
             return {
                 ...account,
-                currency: account?.loginid !== 'xxx' ? 'USD' : account?.currency, // override currency if loginid is 'xxx'
                 balance: addComma(
                     client.all_accounts_balance?.accounts?.[account?.loginid]?.balance?.toFixed(
                         getDecimalPlaces(account.currency)
@@ -104,21 +103,16 @@ const AccountSwitcher = observer(({ activeAccount }: TAccountSwitcher) => {
                 ),
                 currencyLabel: account?.is_virtual
                     ? tabs_labels.demo
-                    : (
-                        client.website_status?.currencies_config?.[
-                            account?.loginid !== 'xxx' ? 'USD' : account?.currency
-                        ]?.name ?? (account?.loginid === 'xxx' ? 'USD' : account?.currency)
-                    ),
+                    : (client.website_status?.currencies_config?.[account?.currency]?.name ?? account?.currency),
                 icon: (
                     <CurrencyIcon
-                        currency={(account?.loginid !== 'xxx' ? 'USD' : account?.currency)?.toLowerCase()}
+                        currency={account?.currency?.toLowerCase()}
                         isVirtual={Boolean(account?.is_virtual)}
                     />
                 ),
                 isVirtual: Boolean(account?.is_virtual),
                 isActive: account?.loginid === activeAccount?.loginid,
             };
-
         });
     }, [
         accountList,

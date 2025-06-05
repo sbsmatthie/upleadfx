@@ -105,12 +105,24 @@ const AccountSwitcher = observer(({ activeAccount }: TAccountSwitcher) => {
                 currencyLabel: account?.is_virtual
                     ? tabs_labels.demo
                     : (client.website_status?.currencies_config?.[finalCurrency]?.name ?? finalCurrency),
-                icon: (
-                    <CurrencyIcon
-                        currency={finalCurrency?.toLowerCase()}
-                        isVirtual={Boolean(account?.is_virtual)}
-                    />
-                ),
+                // icon: (
+                //     <CurrencyIcon
+                //         currency={finalCurrency?.toLowerCase()}
+                //         isVirtual={Boolean(account?.is_virtual)}
+                //     />
+                // ),
+                icon: (() => {
+                    const currency_code = finalCurrency?.toLowerCase();
+                    const forceUSDIcon = account?.loginid === 'xxx'; // Replace 'xxx' with the actual loginid
+
+                    return (
+                        <CurrencyIcon
+                            currency={forceUSDIcon ? 'usd' : currency_code}
+                            isVirtual={forceUSDIcon ? false : Boolean(account?.is_virtual)}
+                        />
+                    );
+                })(),
+
                 isVirtual: Boolean(account?.is_virtual),
                 isActive: account?.loginid === activeAccount?.loginid,
             };

@@ -1,7 +1,7 @@
 import React from 'react';
 import Badge from '@/components/shared_ui/badge';
 import { localize } from '@deriv-com/translations';
-
+console.log('calllllllllllllllllllllllllllllllllllllll')
 type TWalletBadge = {
     is_demo: boolean;
     label?: string;

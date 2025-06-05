@@ -1,200 +1,449 @@
-import React, { useEffect } from 'react';
-import { lazy, Suspense, useMemo } from 'react';
+import clsx from 'clsx';
 import { observer } from 'mobx-react-lite';
-import { CurrencyIcon } from '@/components/currency/currency-icon';
-import { addComma, getDecimalPlaces } from '@/components/shared';
-import Popover from '@/components/shared_ui/popover';
-import { api_base } from '@/external/bot-skeleton';
-import { useOauth2 } from '@/hooks/auth/useOauth2';
+import { standalone_routes } from '@/components/shared';
+import Button from '@/components/shared_ui/button';
+import useActiveAccount from '@/hooks/api/account/useActiveAccount';
+import useIsGrowthbookIsLoaded from '@/hooks/growthbook/useIsGrowthbookLoaded';
 import { useApiBase } from '@/hooks/useApiBase';
 import { useStore } from '@/hooks/useStore';
-import { waitForDomElement } from '@/utils/dom-observer';
-import { localize } from '@deriv-com/translations';
-import { AccountSwitcher as UIAccountSwitcher, Loader, useDevice } from '@deriv-com/ui';
-import DemoAccounts from './common/demo-accounts';
-import RealAccounts from './common/real-accounts';
-import { TAccountSwitcher, TAccountSwitcherProps, TModifiedAccount } from './common/types';
-import { LOW_RISK_COUNTRIES } from './utils';
-import './account-switcher.scss';
+import { StandaloneCircleUserRegularIcon } from '@deriv/quill-icons/Standalone';
+import {
+    LabelPairedChartLineCaptionRegularIcon,
+    LabelPairedObjectsColumnCaptionRegularIcon,
+    LabelPairedPuzzlePieceTwoCaptionBoldIcon,
+    LabelPairedSignalXlRegularIcon,
+    LabelPairedGaugeMaxLgRegularIcon,
+    LabelPairedCopyMdRegularIcon,
+    LabelPairedChartTradingviewLgRegularIcon,
+    LabelPairedTelegramCaptionIcon,
+    LabelPairedWhatsappCaptionIcon,
+    LabelPairedWalletCircleMinusLgRegularIcon,
+    LabelPairedWalletCirclePlusCaptionRegularIcon,
+    LabelPairedFileInvoiceDollarLgRegularIcon,
+    LabelPairedTiktokCaptionIcon,
+} from '@deriv/quill-icons/LabelPaired';
 
-const AccountInfoWallets = lazy(() => import('./wallets/account-info-wallets'));
+import {
+    StandaloneWalletCirclePlusRegularIcon,
+    StandaloneWalletCircleMinusRegularIcon,
+} from '@deriv/quill-icons/Standalone';
 
-const tabs_labels = {
-    demo: localize('Demo'),
-    real: localize('Real'),
-};
+import {
+    LegacyCloseCircle2pxBlackIcon,
+    LegacySettings1pxIcon,
+} from '@deriv/quill-icons/Legacy';
 
-const RenderAccountItems = ({
-    isVirtual,
-    modifiedCRAccountList,
-    modifiedMFAccountList,
-    modifiedVRTCRAccountList,
-    switchAccount,
-    activeLoginId,
-    client,
-}: TAccountSwitcherProps) => {
-    const { oAuthLogout } = useOauth2({ handleLogout: async () => client.logout(), client });
-    const is_low_risk_country = LOW_RISK_COUNTRIES().includes(client.account_settings?.country_code ?? '');
-    const is_virtual = !!isVirtual;
+import { requestOidcAuthentication } from '@deriv-com/auth-client';
+import { Localize, useTranslations } from '@deriv-com/translations';
+import { Header, useDevice, Wrapper } from '@deriv-com/ui';
+import { Tooltip } from '@deriv-com/ui';
+import { isDotComSite } from '../../../utils';
+import { AppLogo } from '../app-logo';
+import AccountsInfoLoader from './account-info-loader';
+import AccountSwitcher from './account-switcher';
+import MenuItems from './menu-items';
+import MobileMenu from './mobile-menu';
+import PlatformSwitcher from './platform-switcher';
+import './header.scss';
 
-    useEffect(() => {
-        // Update the max-height from the accordion content set from deriv-com/ui
-        const parent_container = document.getElementsByClassName('account-switcher-panel')?.[0] as HTMLDivElement;
-        if (!isVirtual && parent_container) {
-            parent_container.style.maxHeight = '70vh';
-            waitForDomElement('.deriv-accordion__content', parent_container)?.then((accordionElement: unknown) => {
-                const element = accordionElement as HTMLDivElement;
-                if (element) {
-                    element.style.maxHeight = '70vh';
-                }
-            });
-        }
-    }, [isVirtual]);
+// SBS imports
+import { ArrowDownCircle, ArrowUpCircle, Mail, Menu } from 'lucide-react';
+import { useState } from 'react';
+import { Menu, X } from 'lucide-react';
 
-    if (is_virtual) {
-        return (
-            <>
-                <DemoAccounts
-                    modifiedVRTCRAccountList={modifiedVRTCRAccountList as TModifiedAccount[]}
-                    switchAccount={switchAccount}
-                    activeLoginId={activeLoginId}
-                    isVirtual={is_virtual}
-                    tabs_labels={tabs_labels}
-                    oAuthLogout={oAuthLogout}
-                    is_logging_out={client.is_logging_out}
-                />
-            </>
-        );
-    } else {
-        return (
-            <RealAccounts
-                modifiedCRAccountList={modifiedCRAccountList as TModifiedAccount[]}
-                modifiedMFAccountList={modifiedMFAccountList as TModifiedAccount[]}
-                switchAccount={switchAccount}
-                isVirtual={is_virtual}
-                tabs_labels={tabs_labels}
-                is_low_risk_country={is_low_risk_country}
-                oAuthLogout={oAuthLogout}
-                loginid={activeLoginId}
-                is_logging_out={client.is_logging_out}
-                upgradeable_landing_companies={client.upgradeable_landing_companies ?? null}
-            />
-        );
-    }
-};
-
-const AccountSwitcher = observer(({ activeAccount }: TAccountSwitcher) => {
+const AppHeader = observer(() => {
+    const { isGBLoaded, isGBAvailable } = useIsGrowthbookIsLoaded();
     const { isDesktop } = useDevice();
-    const { accountList } = useApiBase();
-    const { ui, run_panel, client } = useStore();
-    const { accounts } = client;
-    const { toggleAccountsDialog, is_accounts_switcher_on, account_switcher_disabled_message } = ui;
-    const { is_stop_button_visible } = run_panel;
-    const has_wallet = Object.keys(accounts).some(id => accounts[id].account_category === 'wallet');
+    const { isAuthorizing, activeLoginid } = useApiBase();
+    const { client } = useStore() ?? {};
 
-    const modifiedAccountList = useMemo(() => {
-        return accountList?.map(account => {
-            return {
-                ...account,
-                balance: addComma(
-                    client.all_accounts_balance?.accounts?.[account?.loginid]?.balance?.toFixed(
-                        getDecimalPlaces(account.currency)
-                    ) ?? '0'
-                ),
-                currencyLabel: account?.is_virtual
-                    ? tabs_labels.demo
-                    : (client.website_status?.currencies_config?.[account?.currency]?.name ?? account?.currency),
-                icon: (
-                    <CurrencyIcon
-                        currency={account?.currency?.toLowerCase()}
-                        isVirtual={Boolean(account?.is_virtual)}
-                    />
-                ),
-                isVirtual: Boolean(account?.is_virtual),
-                isActive: account?.loginid === activeAccount?.loginid,
-            };
-        });
-    }, [
-        accountList,
-        client.all_accounts_balance?.accounts,
-        client.website_status?.currencies_config,
-        activeAccount?.loginid,
-    ]);
-    const modifiedCRAccountList = useMemo(() => {
-        return modifiedAccountList?.filter(account => account?.loginid?.includes('CR')) ?? [];
-    }, [modifiedAccountList]);
+    const { data: activeAccount } = useActiveAccount({ allBalanceData: client?.all_accounts_balance });
+    const { accounts, getCurrency } = client ?? {};
+    const has_wallet = Object.keys(accounts ?? {}).some(id => accounts?.[id].account_category === 'wallet');
 
-    const modifiedMFAccountList = useMemo(() => {
-        return modifiedAccountList?.filter(account => account?.loginid?.includes('MF')) ?? [];
-    }, [modifiedAccountList]);
+    const currency = getCurrency?.();
+    const { localize } = useTranslations();
 
-    const modifiedVRTCRAccountList = useMemo(() => {
-        return modifiedAccountList?.filter(account => account?.loginid?.includes('VRT')) ?? [];
-    }, [modifiedAccountList]);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false); // Drawer state
 
-    const switchAccount = async (loginId: number) => {
-        if (loginId.toString() === activeAccount?.loginid) return;
-        const account_list = JSON.parse(localStorage.getItem('accountsList') ?? '{}');
-        const token = account_list[loginId];
-        if (!token) return;
-        localStorage.setItem('authToken', token);
-        localStorage.setItem('active_loginid', loginId.toString());
-        await api_base?.init(true);
-        const search_params = new URLSearchParams(window.location.search);
-        const selected_account = modifiedAccountList.find(acc => acc.loginid === loginId.toString());
-        if (!selected_account) return;
-        const account_param = selected_account.is_virtual ? 'demo' : selected_account.currency;
-        search_params.set('account', account_param);
-        window.history.pushState({}, '', `${window.location.pathname}?${search_params.toString()}`);
+    const renderAccountSection = () => {
+        if (isAuthorizing) {
+            return <AccountsInfoLoader isLoggedIn isMobile={!isDesktop} speed={3} />;
+        } else if (activeLoginid) {
+            return (
+                <>
+                    {isDesktop &&
+                        (() => {
+                            const redirect_url = new URL(standalone_routes.personal_details);
+                            const urlParams = new URLSearchParams(window.location.search);
+                            const account_param = urlParams.get('account');
+                            const is_virtual = client?.is_virtual || account_param === 'demo';
+
+                            if (is_virtual) {
+                                redirect_url.searchParams.set('account', 'demo');
+                            } else if (currency) {
+                                redirect_url.searchParams.set('account', currency);
+                            }
+                            return (
+                                <Tooltip
+                                    as='a'
+                                    href={redirect_url.toString()}
+                                    tooltipContent={localize('Manage account settings')}
+                                    tooltipPosition='bottom'
+                                    className='app-header__account-settings'
+                                >
+                                    <StandaloneCircleUserRegularIcon className='app-header__profile_icon' />
+                                </Tooltip>
+                            );
+                        })()}
+                    <AccountSwitcher activeAccount={activeAccount} />
+                    {isDesktop &&
+                        (has_wallet ? (
+                            <Button
+                                className='manage-funds-button'
+                                has_effect
+                                text={localize('Manage funds')}
+                                onClick={() => {
+                                    let redirect_url = new URL(standalone_routes.wallets_transfer);
+
+                                    if (isGBAvailable && isGBLoaded) {
+                                        redirect_url = new URL(standalone_routes.recent_transactions);
+                                    }
+
+                                    if (currency) {
+                                        redirect_url.searchParams.set('account', currency);
+                                    }
+                                    window.location.assign(redirect_url.toString());
+                                }}
+                                primary
+                            />
+                        ) : (
+                            <Button
+                                primary
+                                onClick={() => {
+                                    const redirect_url = new URL(standalone_routes.cashier_deposit);
+                                    if (currency) {
+                                        redirect_url.searchParams.set('account', currency);
+                                    }
+                                    window.location.assign(redirect_url.toString());
+                                }}
+                                className='deposit-button'
+                            >
+                                {localize('Deposit')}
+                            </Button>
+                        ))}
+                </>
+            );
+        } else {
+            return (
+                <div className='auth-actions'>
+                    <Button
+                        tertiary
+                        onClick={async () => {
+                            const app_id = window.localStorage.getItem('APP_ID');
+                            window.location.href =
+                                'https://oauth.deriv.com/oauth2/authorize?app_id=' + app_id + '&l=EN&brand=deriv';
+                        }}
+                    >
+                        <Localize i18n_default_text='Log in' />
+                    </Button>
+                    <Button
+                        primary
+                        onClick={() => {
+                            window.open(standalone_routes.signup);
+                        }}
+                    >
+                        <Localize i18n_default_text='Sign up' />
+                    </Button>
+                </div>
+            );
+        }
     };
 
     return (
-        activeAccount &&
-        (has_wallet ? (
-            <Suspense fallback={<Loader />}>
-                <AccountInfoWallets is_dialog_on={is_accounts_switcher_on} toggleDialog={toggleAccountsDialog} />
-            </Suspense>
-        ) : (
-            <Popover
-                className='run-panel__info'
-                classNameBubble='run-panel__info--bubble'
-                alignment='bottom'
-                message={account_switcher_disabled_message}
-                zIndex='5'
+        <>
+            <Header
+                className={clsx('app-header', {
+                    'app-header--desktop': isDesktop,
+                    'app-header--mobile': !isDesktop,
+                })}
             >
-                <UIAccountSwitcher
-                    activeAccount={activeAccount}
-                    isDisabled={is_stop_button_visible}
-                    tabsLabels={tabs_labels}
-                    modalContentStyle={{
-                        content: {
-                            top: isDesktop ? '30%' : '50%',
-                            borderRadius: '10px',
-                        },
-                    }}
-                >
-                    <UIAccountSwitcher.Tab title={tabs_labels.real}>
-                        <RenderAccountItems
-                            modifiedCRAccountList={modifiedCRAccountList as TModifiedAccount[]}
-                            modifiedMFAccountList={modifiedMFAccountList as TModifiedAccount[]}
-                            switchAccount={switchAccount}
-                            activeLoginId={activeAccount?.loginid}
-                            client={client}
-                        />
-                    </UIAccountSwitcher.Tab>
-                    <UIAccountSwitcher.Tab title={tabs_labels.demo}>
-                        <RenderAccountItems
-                            modifiedVRTCRAccountList={modifiedVRTCRAccountList as TModifiedAccount[]}
-                            switchAccount={switchAccount}
-                            isVirtual
-                            activeLoginId={activeAccount?.loginid}
-                            client={client}
-                        />
-                    </UIAccountSwitcher.Tab>
-                </UIAccountSwitcher>
-            </Popover>
-        ))
+                <Wrapper variant='left'>
+                    {isDesktop ? (
+                        <div
+                            className='custom-logo-wrapper'
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '10px',
+                                marginRight: '24px',
+                            }}
+                        >
+                            <button
+                                className='menu-button'
+                                onClick={() => setIsDrawerOpen(prev => !prev)}
+                            >
+                                {isDrawerOpen ? <X size={24} /> : <Menu size={24} />}
+                            </button>
+
+                            <Wrapper variant='left'>
+                                <div className='custom-logo-wrapper' style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                    <img src='/assets/logo/logo.jpeg' alt='dtradersite' style={{ height: '35px' }} />
+                                </div>
+                            </Wrapper>
+
+                            <div className={`mobile-menu ${isDrawerOpen ? 'open' : ''}`}>
+                                <div
+                                    className='custom-logo-wrapper'
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '10px',
+                                        marginRight: '24px',
+                                    }}
+                                >
+                                    <LegacyCloseCircle2pxBlackIcon onClick={() => setIsDrawerOpen(prev => !prev)}
+                                        height='30px'
+                                        width='30px'
+                                        fill='white'
+                                    />
+                                    <span className='logo-text'>
+                                        <span className='logo-d'>uplead</span>
+                                        <span className='logo-markets'>fx</span>
+                                    </span>
+                                </div>
+
+                                <a
+                                  href="https://app.deriv.com/reports/positions"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="menu-link-button"
+                                >
+                                  <LabelPairedFileInvoiceDollarLgRegularIcon
+                                    height="30px"
+                                    width="30px"
+                                    fill="white"
+                                  />
+                                  <span>Reports</span>
+                                </a>
+                                <a
+                                  href="https://app.deriv.com/settings"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="menu-link-button"
+                                >
+                                  <LegacySettings1pxIcon
+                                    height="30px"
+                                    width="30px"
+                                    fill="white"
+                                  />
+                                  <span>Settings</span>
+                                </a>
+                                <a
+                                  href="#"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="menu-link-button"
+                                >
+                                  <LabelPairedWalletCirclePlusCaptionRegularIcon
+                                    height="30px"
+                                    width="30px"
+                                    fill="white"
+                                  />
+                                  <span>Deposit</span>
+                                </a>
+                                <a
+                                  href="#"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="menu-link-button"
+                                >
+                                  <LabelPairedWalletCircleMinusLgRegularIcon
+                                    height="30px"
+                                    width="30px"
+                                    fill="white"
+                                  />
+                                  <span>Withdraw</span>
+                                </a>
+                                <a
+                                  href="https://t.me/zim_top_trader"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="menu-link-button"
+                                >
+                                  <LabelPairedTelegramCaptionIcon
+                                    height="30px"
+                                    width="30px"
+                                    fill="white"
+                                  />
+                                  <span>Telegram</span>
+                                </a>
+                                <a
+                                  href="https://chat.whatsapp.com/ENa533fQ7P4ET9b9jokdOB"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="menu-link-button"
+                                >
+                                  <LabelPairedWhatsappCaptionIcon
+                                    height="30px"
+                                    width="30px"
+                                    fill="white"
+                                  />
+                                  <span>WhatsAPP</span>
+                                </a>
+                                <a
+                                  href="http://www.tiktok.com/@upleadforexacademy"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="menu-link-button"
+                                >
+                                  <LabelPairedTiktokCaptionIcon
+                                    height="30px"
+                                    width="30px"
+                                    fill="white"
+                                  />
+                                  <span>TikTok</span>
+                                </a>
+                            </div>
+                        </div>
+                    ) : (
+                        <>
+                            <button
+                                className='menu-button'
+                                onClick={() => setIsDrawerOpen(prev => !prev)}
+                            >
+                                {isDrawerOpen ? <X size={24} /> : <Menu size={24} />}
+                            </button>
+
+                            <Wrapper variant='left'>
+                                <div className='custom-logo-wrapper' style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                    <img src='/assets/logo/logo.jpeg' alt='dtradersite' style={{ height: '35px' }} />
+                                </div>
+                            </Wrapper>
+
+                            <div className={`mobile-menu ${isDrawerOpen ? 'open' : ''}`}>
+                                <div
+                                    className='custom-logo-wrapper'
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '10px',
+                                        marginRight: '24px',
+                                    }}
+                                >
+                                    <LegacyCloseCircle2pxBlackIcon onClick={() => setIsDrawerOpen(prev => !prev)}
+                                        height='30px'
+                                        width='30px'
+                                        fill='white'
+                                    />
+                                    <span className='logo-text'>
+                                        <span className='logo-d'>uplead</span>
+                                        <span className='logo-markets'>fx</span>
+                                    </span>
+                                </div>
+
+                                <a
+                                  href="https://app.deriv.com/reports/positions"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="menu-link-button"
+                                >
+                                  <LabelPairedFileInvoiceDollarLgRegularIcon
+                                    height="30px"
+                                    width="30px"
+                                    fill="white"
+                                  />
+                                  <span>Reports</span>
+                                </a>
+                                <a
+                                  href="https://app.deriv.com/settings"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="menu-link-button"
+                                >
+                                  <LegacySettings1pxIcon
+                                    height="30px"
+                                    width="30px"
+                                    fill="white"
+                                  />
+                                  <span>Settings</span>
+                                </a>
+                                <a
+                                  href="#"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="menu-link-button"
+                                >
+                                  <LabelPairedWalletCirclePlusCaptionRegularIcon
+                                    height="30px"
+                                    width="30px"
+                                    fill="white"
+                                  />
+                                  <span>Deposit</span>
+                                </a>
+                                <a
+                                  href="#"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="menu-link-button"
+                                >
+                                  <LabelPairedWalletCircleMinusLgRegularIcon
+                                    height="30px"
+                                    width="30px"
+                                    fill="white"
+                                  />
+                                  <span>Withdraw</span>
+                                </a>
+                                <a
+                                  href="https://t.me/zim_top_trader"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="menu-link-button"
+                                >
+                                  <LabelPairedTelegramCaptionIcon
+                                    height="30px"
+                                    width="30px"
+                                    fill="white"
+                                  />
+                                  <span>Telegram</span>
+                                </a>
+                                <a
+                                  href="https://chat.whatsapp.com/ENa533fQ7P4ET9b9jokdOB"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="menu-link-button"
+                                >
+                                  <LabelPairedWhatsappCaptionIcon
+                                    height="30px"
+                                    width="30px"
+                                    fill="white"
+                                  />
+                                  <span>WhatsAPP</span>
+                                </a>
+                                <a
+                                  href="http://www.tiktok.com/@upleadforexacademy"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="menu-link-button"
+                                >
+                                  <LabelPairedTiktokCaptionIcon
+                                    height="30px"
+                                    width="30px"
+                                    fill="white"
+                                  />
+                                  <span>TikTok</span>
+                                </a>
+                            </div>
+                        </>
+                    )}
+                </Wrapper>
+
+                <Wrapper variant='right'>{renderAccountSection()}</Wrapper>
+            </Header>
+        </>
     );
+
 });
 
-export default AccountSwitcher;
+export default AppHeader;

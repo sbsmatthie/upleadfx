@@ -45,7 +45,7 @@ const AppHeader = observer(() => {
         if (isAuthorizing) {
             return <AccountsInfoLoader isLoggedIn isMobile={!isDesktop} speed={3} />;
         } else if (activeLoginid) {
-            console.log('222222222222222222222222222222222222');
+            console.log('sssssssssssssssssssssssssssssssssssssssssssss');
             return (
                 <>
                     {/* <CustomNotifications /> */}

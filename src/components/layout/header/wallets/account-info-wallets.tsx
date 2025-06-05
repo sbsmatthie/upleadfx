@@ -19,7 +19,7 @@ import { useDevice } from '@deriv-com/ui';
 import AccountInfoWrapper from '../account-info-wrapper';
 import { AccountSwitcherWallet, AccountSwitcherWalletMobile } from '../AccountSwitcherWallet';
 import WalletBadge from './wallet-badge';
-
+console.log('caaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
 type TAccountInfoWallets = {
     toggleDialog: () => void;
     is_dialog_on: boolean;

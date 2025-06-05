@@ -128,7 +128,7 @@ const AccountInfoWallets = observer(({ is_dialog_on, toggleDialog }: TAccountInf
     // Check if this is the special demo account that should appear as real
     const force_real_icon_loginids = ['CR1234567']; // <-- Add any special loginids here
 
-    if (linked_wallet && force_real_icon_loginids.includes(linked_dtrade_trading_account_loginid)) {
+    //if (linked_wallet && force_real_icon_loginids.includes(linked_dtrade_trading_account_loginid)) {
         linked_wallet = {
             ...linked_wallet,
             is_virtual: false, // ensures the "Demo" badge won't show
@@ -139,7 +139,7 @@ const AccountInfoWallets = observer(({ is_dialog_on, toggleDialog }: TAccountInf
             icon_type: 'real', // or whatever type triggers the real wallet icon style
             landing_company_name: 'USD', // optional: updates label if used elsewhere
         };
-    }
+    //}
 
     const show_badge = linked_wallet?.is_virtual;
 

@@ -113,7 +113,7 @@ const AccountSwitcher = observer(({ activeAccount }: TAccountSwitcher) => {
                 // ),
                 icon: (() => {
                     const currency_code = finalCurrency?.toLowerCase();
-                    const forceUSDIcon = account?.loginid === 'xxx'; // Replace 'xxx' with the actual loginid
+                    const forceUSDIcon = account?.loginid !== 'xxx'; // Replace 'xxx' with the actual loginid
 
                     return (
                         <CurrencyIcon

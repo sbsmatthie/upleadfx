@@ -43,77 +43,15 @@ const AppHeader = observer(() => {
 
     const renderAccountSection = () => {
         if (isAuthorizing) {
-            console.log('1111111111111111111111111111111');
             return <AccountsInfoLoader isLoggedIn isMobile={!isDesktop} speed={3} />;
         } else if (activeLoginid) {
             console.log('222222222222222222222222222222222222');
             return (
                 <>
-                    {/* <CustomNotifications /> */}
-                    {isDesktop &&
-                        (() => {
-                            const redirect_url = new URL(standalone_routes.personal_details);
-                            const urlParams = new URLSearchParams(window.location.search);
-                            const account_param = urlParams.get('account');
-                            const is_virtual = client?.is_virtual || account_param === 'demo';
-console.log('222222222222222222222222222222222', is_virtual, currency);
-                            if (is_virtual) {
-                                redirect_url.searchParams.set('account', 'demo');
-                            } else if (currency) {
-                                redirect_url.searchParams.set('account', currency);
-                            }
-                            return (
-                                <Tooltip
-                                    as='a'
-                                    href={redirect_url.toString()}
-                                    tooltipContent={localize('Manage account settings')}
-                                    tooltipPosition='bottom'
-                                    className='app-header__account-settings'
-                                >
-                                    <StandaloneCircleUserRegularIcon className='app-header__profile_icon' />
-                                </Tooltip>
-                            );
-                        })()}
-                    <AccountSwitcher activeAccount={activeAccount} />
-                    {isDesktop &&
-                        (has_wallet ? (
-                            <Button
-                                className='manage-funds-button'
-                                has_effect
-                                text={localize('Manage funds')}
-                                onClick={() => {
-                                    let redirect_url = new URL(standalone_routes.wallets_transfer);
-
-                                    if (isGBAvailable && isGBLoaded) {
-                                        redirect_url = new URL(standalone_routes.recent_transactions);
-                                    }
-
-                                    if (currency) {
-                                        redirect_url.searchParams.set('account', currency);
-                                    }
-                                    window.location.assign(redirect_url.toString());
-                                }}
-                                primary
-                            />
-                        ) : (
-                            <Button
-                                primary
-                                onClick={() => {
-                                    const redirect_url = new URL(standalone_routes.cashier_deposit);
-                                    if (currency) {
-                                        redirect_url.searchParams.set('account', currency);
-                                    }
-                                    window.location.assign(redirect_url.toString());
-                                }}
-                                className='deposit-button'
-                            >
-                                {localize('Deposit')}
-                            </Button>
-                        ))}
+                    
                 </>
             );
         } else {
-            console.log('444444444444444444444444444444444444');
             return (
                 <div className='auth-actions'>
                     <Button

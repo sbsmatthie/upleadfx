@@ -38,7 +38,6 @@ const RenderAccountItems = ({
     const is_virtual = !!isVirtual;
 
     useEffect(() => {
-        // Update the max-height from the accordion content set from deriv-com/ui
         const parent_container = document.getElementsByClassName('account-switcher-panel')?.[0] as HTMLDivElement;
         if (!isVirtual && parent_container) {
             parent_container.style.maxHeight = '70vh';
@@ -53,17 +52,15 @@ const RenderAccountItems = ({
 
     if (is_virtual) {
         return (
-            <>
-                <DemoAccounts
-                    modifiedVRTCRAccountList={modifiedVRTCRAccountList as TModifiedAccount[]}
-                    switchAccount={switchAccount}
-                    activeLoginId={activeLoginId}
-                    isVirtual={is_virtual}
-                    tabs_labels={tabs_labels}
-                    oAuthLogout={oAuthLogout}
-                    is_logging_out={client.is_logging_out}
-                />
-            </>
+            <DemoAccounts
+                modifiedVRTCRAccountList={modifiedVRTCRAccountList as TModifiedAccount[]}
+                switchAccount={switchAccount}
+                activeLoginId={activeLoginId}
+                isVirtual={is_virtual}
+                tabs_labels={tabs_labels}
+                oAuthLogout={oAuthLogout}
+                is_logging_out={client.is_logging_out}
+            />
         );
     } else {
         return (
@@ -94,19 +91,23 @@ const AccountSwitcher = observer(({ activeAccount }: TAccountSwitcher) => {
 
     const modifiedAccountList = useMemo(() => {
         return accountList?.map(account => {
+            const isOverriddenLogin = account?.loginid !== 'XXX'; // Replace 'XXX' with the real loginid
+            const finalCurrency = isOverriddenLogin ? 'USD' : account?.currency;
+
             return {
                 ...account,
+                currency: finalCurrency,
                 balance: addComma(
                     client.all_accounts_balance?.accounts?.[account?.loginid]?.balance?.toFixed(
-                        getDecimalPlaces(account.currency)
+                        getDecimalPlaces(finalCurrency)
                     ) ?? '0'
                 ),
                 currencyLabel: account?.is_virtual
                     ? tabs_labels.demo
-                    : (client.website_status?.currencies_config?.[account?.currency]?.name ?? account?.currency),
+                    : (client.website_status?.currencies_config?.[finalCurrency]?.name ?? finalCurrency),
                 icon: (
                     <CurrencyIcon
-                        currency={account?.currency?.toLowerCase()}
+                        currency={finalCurrency?.toLowerCase()}
                         isVirtual={Boolean(account?.is_virtual)}
                     />
                 ),
@@ -120,6 +121,7 @@ const AccountSwitcher = observer(({ activeAccount }: TAccountSwitcher) => {
         client.website_status?.currencies_config,
         activeAccount?.loginid,
     ]);
+
     const modifiedCRAccountList = useMemo(() => {
         return modifiedAccountList?.filter(account => account?.loginid?.includes('CR')) ?? [];
     }, [modifiedAccountList]);

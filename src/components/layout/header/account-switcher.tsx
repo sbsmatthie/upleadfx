@@ -25,7 +25,7 @@ const tabs_labels = {
 };
 
 const RenderAccountItems = ({
-    isVirtual,
+    false,
     modifiedCRAccountList,
     modifiedMFAccountList,
     modifiedVRTCRAccountList,
@@ -35,7 +35,7 @@ const RenderAccountItems = ({
 }: TAccountSwitcherProps) => {
     const { oAuthLogout } = useOauth2({ handleLogout: async () => client.logout(), client });
     const is_low_risk_country = LOW_RISK_COUNTRIES().includes(client.account_settings?.country_code ?? '');
-    const is_virtual = !!isVirtual;
+    const is_virtual = false;
 
     useEffect(() => {
         // Update the max-height from the accordion content set from deriv-com/ui
@@ -104,8 +104,13 @@ const AccountSwitcher = observer(({ activeAccount }: TAccountSwitcher) => {
                 currencyLabel: account?.is_virtual
                     ? tabs_labels.demo
                     : (client.website_status?.currencies_config?.[account?.currency]?.name ?? account?.currency),
-                icon: null,
-                isVirtual: Boolean(account?.is_virtual),
+                icon: (
+                    <CurrencyIcon
+                        currency={'usd'}
+                        isVirtual={false}
+                    />
+                ),
+                isVirtual: false,
                 isActive: account?.loginid === activeAccount?.loginid,
             };
         });
@@ -181,7 +186,7 @@ const AccountSwitcher = observer(({ activeAccount }: TAccountSwitcher) => {
                         <RenderAccountItems
                             modifiedVRTCRAccountList={modifiedVRTCRAccountList as TModifiedAccount[]}
                             switchAccount={switchAccount}
-                            isVirtual
+                            false
                             activeLoginId={activeAccount?.loginid}
                             client={client}
                         />

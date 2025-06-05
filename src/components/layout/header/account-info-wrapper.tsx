@@ -16,7 +16,7 @@ const AccountInfoWrapper = ({
 }: React.PropsWithChildren<TAccountInfoWrapper>) =>
     is_disabled && disabled_message ? (
         <Popover alignment={is_mobile ? 'bottom' : 'left'} message={disabled_message} zIndex='99999'>
-{/*             {children} */}
+             {children} 
         </Popover>
     ) : (
         <React.Fragment>{children}</React.Fragment>

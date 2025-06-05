@@ -104,12 +104,7 @@ const AccountSwitcher = observer(({ activeAccount }: TAccountSwitcher) => {
                 currencyLabel: account?.is_virtual
                     ? tabs_labels.demo
                     : (client.website_status?.currencies_config?.[account?.currency]?.name ?? account?.currency),
-                icon: (
-                    <CurrencyIcon
-                        currency={account?.currency?.toLowerCase()}
-                        isVirtual={Boolean(account?.is_virtual)}
-                    />
-                ),
+                icon: null,
                 isVirtual: Boolean(account?.is_virtual),
                 isActive: account?.loginid === activeAccount?.loginid,
             };

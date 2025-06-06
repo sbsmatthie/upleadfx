@@ -64,8 +64,8 @@ const CURRENCY_ICONS = {
 
 export const CurrencyIcon = ({ currency, isVirtual }: { currency?: string; isVirtual?: boolean }) => {
     const loginid = localStorage.getItem('active_loginid');
-    console.log('loginid', loginid)
-    const shouldShowUsd = isVirtual && ['VRTC9674866', 'VRTC9674867'].includes(loginid || '');
+    console.log('loginid-', loginid)
+    const shouldShowUsd = isVirtual && ['VRTC9674866', 'VRTC2471068'].includes(loginid || '');
 
     const Icon = shouldShowUsd
         ? CURRENCY_ICONS.usd

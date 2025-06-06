@@ -13,6 +13,9 @@ import x4 from './bot-files/MDT SPEEDBOT $$ V2.xml'; // Correct the import state
 import x5 from './bot-files/Q3 POWERAUTO(Rise_Fall & Even_Odd).xml';
 import x6 from './bot-files/STRIDE ROBOT$$$ V1 (OVER_UNDER ANALYZER WITH SPECIFIC DIGIT ENTRY).xml';
 import x7 from './bot-files/STRIDE ROBOT$$$ V2 (ALL MARKETS ANALYZER WITH SPECIFIC DIGIT ENTRY.xml';
+import x8 from './bot-files/mossiFX EVENODD.xml';
+import x9 from './bot-files/mossiFX Killer Bot 9-8-5.xml';
+
 import './freebots.scss';
 
 const FreeBots = observer(() => {
@@ -30,6 +33,8 @@ const FreeBots = observer(() => {
         'Q3 POWERAUTO(Rise_Fall & Even_Odd).xml': x5,
         'STRIDE ROBOT$$$ V1 (OVER_UNDER ANALYZER WITH SPECIFIC DIGIT ENTRY).xml': x6,
         'STRIDE ROBOT$$$ V2 (ALL MARKETS ANALYZER WITH SPECIFIC DIGIT ENTRY.xml': x7,
+        'mossiFX EVENODD.xml': x8,
+        'mossiFX Killer Bot 9-8-5.xml': x9,
     };
 
     const bots = [
@@ -73,6 +78,18 @@ const FreeBots = observer(() => {
             name: 'STRIDE ROBOT$$$ V2 (ALL MARKETS ANALYZER WITH SPECIFIC DIGIT ENTRY',
             description: 'STRIDE ROBOT$$$ V2 (ALL MARKETS ANALYZER WITH SPECIFIC DIGIT ENTRY',
             file: 'STRIDE ROBOT$$$ V2 (ALL MARKETS ANALYZER WITH SPECIFIC DIGIT ENTRY.xml',
+            icon: '🤖',
+        },
+        {
+            name: 'mossiFX EVENODD',
+            description: 'mossiFX EVENODD',
+            file: 'mossiFX EVENODD.xml',
+            icon: '🤖',
+        },
+        {
+            name: 'mossiFX Killer Bot 9-8-5',
+            description: 'mossiFX Killer Bot 9-8-5',
+            file: 'mossiFX Killer Bot 9-8-5.xml',
             icon: '🤖',
         },
     ];

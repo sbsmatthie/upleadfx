@@ -26,7 +26,7 @@ const CURRENCY_ICONS = {
     usdc: lazy(() => import('@deriv/quill-icons/Currencies').then(module => ({ default: module.CurrencyUsdcIcon }))),
     usdk: lazy(() => import('@deriv/quill-icons/Currencies').then(module => ({ default: module.CurrencyUsdkIcon }))),
     ust: lazy(() => import('@deriv/quill-icons/Currencies').then(module => ({ default: module.CurrencyUsdtIcon }))),
-    virtual: lazy(() => import('@deriv/quill-icons/Currencies').then(module => ({ default: module.CurrencyUsdIcon }))),
+    virtual: lazy(() => import('@deriv/quill-icons/Currencies').then(module => ({ default: module.CurrencyDemoIcon }))),
     xrp: lazy(() => import('@deriv/quill-icons/Currencies').then(module => ({ default: module.CurrencyXrpIcon }))),
     algo: lazy(() => import('@deriv/quill-icons/Currencies').then(module => ({ default: module.CurrencyAlgoIcon }))),
     avax: lazy(() => import('@deriv/quill-icons/Currencies').then(module => ({ default: module.CurrencyAvaxIcon }))),
@@ -63,13 +63,18 @@ const CURRENCY_ICONS = {
 };
 
 export const CurrencyIcon = ({ currency, isVirtual }: { currency?: string; isVirtual?: boolean }) => {
-    const Icon = isVirtual
-        ? CURRENCY_ICONS.virtual
-        : CURRENCY_ICONS[currency?.toLowerCase() as keyof typeof CURRENCY_ICONS] || CURRENCY_ICONS.unknown;
+    const loginid = localStorage.getItem('loginid');
+    const shouldShowUsd = isVirtual && loginid !== 'xxxx';
+
+    const Icon = shouldShowUsd
+        ? CURRENCY_ICONS.usd
+        : isVirtual
+            ? CURRENCY_ICONS.virtual
+            : CURRENCY_ICONS[currency?.toLowerCase() as keyof typeof CURRENCY_ICONS] || CURRENCY_ICONS.unknown;
 
     return (
         <Suspense fallback={null}>
-            <Icon iconSize='sm' />
+            <Icon iconSize="sm" />
         </Suspense>
     );
 };

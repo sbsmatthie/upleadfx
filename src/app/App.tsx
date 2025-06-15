@@ -1,5 +1,5 @@
 import { initSurvicate } from '../public-path';
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useState, useEffect } from 'react';
 import React from 'react';
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
 import ChunkLoader from '@/components/loader/chunk-loader';
@@ -18,6 +18,7 @@ const Layout = lazy(() => import('../components/layout'));
 const AppRoot = lazy(() => import('./app-root'));
 
 const { TRANSLATIONS_CDN_URL, R2_PROJECT_NAME, CROWDIN_BRANCH_NAME } = process.env;
+
 const i18nInstance = initializeI18n({
     cdnUrl: `${TRANSLATIONS_CDN_URL}/${R2_PROJECT_NAME}/${CROWDIN_BRANCH_NAME}`,
 });
@@ -52,9 +53,13 @@ const router = createBrowserRouter(
 function App() {
     const [isDialogOpen, setDialogOpen] = useState(false);
 
-    React.useEffect(() => {
+    // 🔧 Toggle this to enable/disable maintenance mode
+    const isMaintenanceMode = true;
+
+    useEffect(() => {
         initSurvicate();
         window?.dataLayer?.push({ event: 'page_load' });
+
         return () => {
             const survicate_box = document.getElementById('survicate-box');
             if (survicate_box) {
@@ -63,7 +68,7 @@ function App() {
         };
     }, []);
 
-    React.useEffect(() => {
+    useEffect(() => {
         const accounts_list = localStorage.getItem('accountsList');
         const client_accounts = localStorage.getItem('clientAccounts');
         const url_params = new URLSearchParams(window.location.search);
@@ -107,30 +112,61 @@ function App() {
                 }
             }
         } catch (e) {
-            console.warn('Error', e); // eslint-disable-line no-console
+            console.warn('Error', e);
         }
     }, []);
+
+    // 🔧 Return this instead of app content if maintenance is ON
+    if (isMaintenanceMode) {
+        return (
+            <div
+                style={{
+                    backgroundColor: '#0f172a',
+                    color: '#f8fafc',
+                    fontFamily: 'sans-serif',
+                    height: '100vh',
+                    padding: '2rem',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                }}
+            >
+                <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>🚧 Updates in Progress</h1>
+                <p style={{ fontSize: '1.2rem', maxWidth: '500px', lineHeight: '1.6' }}>
+                    Uplead Forex Academy is currently undergoing updates.<br />
+                    The site will be back online shortly.
+                </p>
+                <p>contact: +263782876599</p>
+            </div>
+        );
+    }
 
     return (
         <>
             <RouterProvider router={router} />
 
             {/* 🔶 Risk Warning Button */}
-            <button
-                className='risk-warning-button'
-                onClick={() => setDialogOpen(true)}
-            >
+            <button className='risk-warning-button' onClick={() => setDialogOpen(true)}>
                 🔶 Risk warning
             </button>
 
             {/* 🔶 Risk Warning Dialog */}
             {isDialogOpen && (
                 <div className='risk-warning-dialog'>
-                    <p>Deriv offers complex derivatives, such as options and contracts for difference (“CFDs”). These products may not be suitable for all clients, and trading them puts you at risk. Please make sure that you understand the following risks before trading Deriv products:
-
-a) You may lose some or all of the money you invest in the trade.
-b) If your trade involves currency conversion, exchange rates will affect your profit and loss.
-You should never trade with borrowed money or with money that you cannot afford to lose.</p>
+                    <p>
+                        Deriv offers complex derivatives, such as options and contracts for difference (“CFDs”). These
+                        products may not be suitable for all clients, and trading them puts you at risk. Please make
+                        sure that you understand the following risks before trading Deriv products:
+                        <br />
+                        <br />
+                        a) You may lose some or all of the money you invest in the trade.
+                        <br />
+                        b) If your trade involves currency conversion, exchange rates will affect your profit and loss.
+                        <br />
+                        You should never trade with borrowed money or with money that you cannot afford to lose.
+                    </p>
                     <button onClick={() => setDialogOpen(false)}>Close</button>
                 </div>
             )}

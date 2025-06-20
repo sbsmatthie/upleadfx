@@ -54,7 +54,7 @@ function App() {
     const [isDialogOpen, setDialogOpen] = useState(false);
 
     // 🔧 Toggle this to enable/disable maintenance mode
-    const isMaintenanceMode = true;
+    const isMaintenanceMode = false;
 
     useEffect(() => {
         initSurvicate();

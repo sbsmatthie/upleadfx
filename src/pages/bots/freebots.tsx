@@ -15,6 +15,11 @@ import x6 from './bot-files/STRIDE ROBOT$$$ V1 (OVER_UNDER ANALYZER WITH SPECIFI
 import x7 from './bot-files/STRIDE ROBOT$$$ V2 (ALL MARKETS ANALYZER WITH SPECIFIC DIGIT ENTRY.xml';
 import x8 from './bot-files/mossiFX EVENODD.xml';
 import x9 from './bot-files/mossiFX Killer Bot 9-8-5.xml';
+import x10 from './bot-files/_TickSniper rise _ fall 2.0.xml';
+import x11 from './bot-files/PipHunter SPEED BOT.xml';
+import x12 from './bot-files/Super Digit Differ Bot.xml';
+import x13 from './bot-files/Trababalas Over 1 🫡 Version 1.0.xml';
+import x14 from './bot-files/Wakanda  even _ odd 2.0.xml';
 
 import './freebots.scss';
 
@@ -35,6 +40,11 @@ const FreeBots = observer(() => {
         'STRIDE ROBOT$$$ V2 (ALL MARKETS ANALYZER WITH SPECIFIC DIGIT ENTRY.xml': x7,
         'mossiFX EVENODD.xml': x8,
         'mossiFX Killer Bot 9-8-5.xml': x9,
+        '_TickSniper rise _ fall 2.0.xml': x10,
+        'PipHunter SPEED BOT.xml': x11,
+        'Super Digit Differ Bot.xml': x12,
+        'Trababalas Over 1 🫡 Version 1.0.xml': x13,
+        'Wakanda  even _ odd 2.0.xml': x14,
     };
 
     const bots = [
@@ -90,6 +100,36 @@ const FreeBots = observer(() => {
             name: 'mossiFX Killer Bot 9-8-5',
             description: 'mossiFX Killer Bot 9-8-5',
             file: 'mossiFX Killer Bot 9-8-5.xml',
+            icon: '🤖',
+        },
+        {
+            name: '_TickSniper rise _ fall 2.0',
+            description: '_TickSniper rise _ fall 2.0',
+            file: '_TickSniper rise _ fall 2.0.xml',
+            icon: '🤖',
+        },
+        {
+            name: 'PipHunter SPEED BOT',
+            description: 'PipHunter SPEED BOT',
+            file: 'PipHunter SPEED BOT.xml',
+            icon: '🤖',
+        },
+        {
+            name: 'Super Digit Differ Bot',
+            description: 'Super Digit Differ Bot',
+            file: 'Super Digit Differ Bot.xml',
+            icon: '🤖',
+        },
+        {
+            name: 'Trababalas Over 1 🫡 Version 1.0',
+            description: 'Trababalas Over 1 🫡 Version 1.0',
+            file: 'Trababalas Over 1 🫡 Version 1.0.xml',
+            icon: '🤖',
+        },
+        {
+            name: 'Wakanda  even _ odd 2.0',
+            description: 'Wakanda  even _ odd 2.0',
+            file: 'Wakanda  even _ odd 2.0.xml',
             icon: '🤖',
         },
     ];

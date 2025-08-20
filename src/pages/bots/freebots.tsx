@@ -20,6 +20,8 @@ import x11 from './bot-files/PipHunter SPEED BOT.xml';
 import x12 from './bot-files/Super Digit Differ Bot.xml';
 import x13 from './bot-files/Trababalas Over 1 🫡 Version 1.0.xml';
 import x14 from './bot-files/Wakanda  even _ odd 2.0.xml';
+import x15 from './bot-files/digit_differs_every_tick_bot.xml';
+import x16 from './bot-files/AUTO C4 VOLT 🇬🇧 2 🇬🇧 AI PREMIUM ROBOT  (2) (1).xml';
 
 import './freebots.scss';
 
@@ -45,9 +47,23 @@ const FreeBots = observer(() => {
         'Super Digit Differ Bot.xml': x12,
         'Trababalas Over 1 🫡 Version 1.0.xml': x13,
         'Wakanda  even _ odd 2.0.xml': x14,
+        'digit_differs_every_tick_bot.xml': x15,
+        'AUTO C4 VOLT 🇬🇧 2 🇬🇧 AI PREMIUM ROBOT  (2) (1).xml': x16,
     };
 
     const bots = [
+        {
+            name: 'digit_differs_every_tick_bot',
+            description: 'digit_differs_every_tick_bot',
+            file: 'digit_differs_every_tick_bot.xml',
+            icon: '🤖',
+        },
+        {
+            name: 'AUTO C4 VOLT 🇬🇧 2 🇬🇧 AI PREMIUM ROBOT  (2) (1)',
+            description: 'AUTO C4 VOLT 🇬🇧 2 🇬🇧 AI PREMIUM ROBOT  (2) (1)',
+            file: 'AUTO C4 VOLT 🇬🇧 2 🇬🇧 AI PREMIUM ROBOT  (2) (1).xml',
+            icon: '🤖',
+        },
         {
             name: 'BLACK PANTHER BOT 2.0',
             description: 'BLACK PANTHER BOT 2.0',

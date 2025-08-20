@@ -1,0 +1,236 @@
+<?xml version="1.0" ?>
+<ns0:xml xmlns:ns0="https://developers.google.com/blockly/xml">
+  
+  
+  <ns0:block type="trade_definition">
+    
+    
+    <ns0:block type="trade_market">
+      
+      
+      <ns0:field name="MARKET">R_100</ns0:field>
+      
+      
+      <ns0:block type="trade_contract_type">
+        
+        
+        <ns0:field name="CONTRACT_TYPE">DIGITDIFF</ns0:field>
+        
+        
+        <ns0:block type="trade_stake">
+          
+          
+          <ns0:field name="AMOUNT">1</ns0:field>
+          
+          
+          <ns0:block type="trade_prediction">
+            
+            
+            <ns0:field name="PREDICTION">5</ns0:field>
+            
+          
+          </ns0:block>
+          
+        
+        </ns0:block>
+        
+      
+      </ns0:block>
+      
+    
+    </ns0:block>
+    
+  
+  </ns0:block>
+  
+  
+  <ns0:block type="variables_set">
+    
+    
+    <ns0:field name="VAR">stake</ns0:field>
+    
+    
+    <ns0:value name="VALUE">
+      
+      
+      <ns0:block type="math_number">
+        
+        
+        <ns0:field name="NUM">1</ns0:field>
+        
+      
+      </ns0:block>
+      
+    
+    </ns0:value>
+    
+  
+  </ns0:block>
+  
+  
+  <ns0:block type="on_strategy_start">
+    
+    
+    <ns0:block type="set_take_profit">
+      
+      
+      <ns0:field name="VALUE">10</ns0:field>
+      
+    
+    </ns0:block>
+    
+    
+    <ns0:block type="set_stop_loss">
+      
+      
+      <ns0:field name="VALUE">10</ns0:field>
+      
+    
+    </ns0:block>
+    
+  
+  </ns0:block>
+  
+  
+  <ns0:block type="on_strategy_finish">
+    
+    
+    <ns0:block type="controls_if">
+      
+      
+      <ns0:value name="IF0">
+        
+        
+        <ns0:block type="logic_compare">
+          
+          
+          <ns0:field name="OP">EQ</ns0:field>
+          
+          
+          <ns0:value name="A">
+            
+            
+            <ns0:block type="get_trade_result"/>
+            
+          
+          </ns0:value>
+          
+          
+          <ns0:value name="B">
+            
+            
+            <ns0:block type="text">
+              
+              
+              <ns0:field name="TEXT">loss</ns0:field>
+              
+            
+            </ns0:block>
+            
+          
+          </ns0:value>
+          
+        
+        </ns0:block>
+        
+      
+      </ns0:value>
+      
+      
+      <ns0:statement name="DO0">
+        
+        
+        <ns0:block type="variables_set">
+          
+          
+          <ns0:field name="VAR">stake</ns0:field>
+          
+          
+          <ns0:value name="VALUE">
+            
+            
+            <ns0:block type="math_arithmetic">
+              
+              
+              <ns0:field name="OP">MULTIPLY</ns0:field>
+              
+              
+              <ns0:value name="A">
+                
+                
+                <ns0:block type="variables_get">
+                  
+                  
+                  <ns0:field name="VAR">stake</ns0:field>
+                  
+                
+                </ns0:block>
+                
+              
+              </ns0:value>
+              
+              
+              <ns0:value name="B">
+                
+                
+                <ns0:block type="math_number">
+                  
+                  
+                  <ns0:field name="NUM">2</ns0:field>
+                  
+                
+                </ns0:block>
+                
+              
+              </ns0:value>
+              
+            
+            </ns0:block>
+            
+          
+          </ns0:value>
+          
+        
+        </ns0:block>
+        
+      
+      </ns0:statement>
+      
+      
+      <ns0:statement name="ELSE">
+        
+        
+        <ns0:block type="variables_set">
+          
+          
+          <ns0:field name="VAR">stake</ns0:field>
+          
+          
+          <ns0:value name="VALUE">
+            
+            
+            <ns0:block type="math_number">
+              
+              
+              <ns0:field name="NUM">1</ns0:field>
+              
+            
+            </ns0:block>
+            
+          
+          </ns0:value>
+          
+        
+        </ns0:block>
+        
+      
+      </ns0:statement>
+      
+    
+    </ns0:block>
+    
+  
+  </ns0:block>
+  
+
+</ns0:xml>

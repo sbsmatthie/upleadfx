@@ -1,4 +1,4 @@
-iimport ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom/client';
 iimport { AuthWrapper } from './app/AuthWrapper';
 import { AnalyticsInitializer } from './utils/analytics';
 import './styles/index.scss';
